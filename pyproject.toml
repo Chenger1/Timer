@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "timer"
+version = "0.1.0"
+description = ""
+authors = ["Vladislav Marahovskiy <vladislav.marahovskiy@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+alembic = "^1.13.2"
+sqlalchemy = "^2.0.32"
+python-dotenv = "^1.0.1"
+fastapi = {extras = ["standard"], version = "^0.112.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
