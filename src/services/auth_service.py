@@ -8,6 +8,7 @@ from src.schemas.auth import (
 from src.schemas.users import User as UserSchema
 from src.models.user import User
 from src.repositories.user_repository import UserRepository
+from src.validators.auth_validator import AuthValidator
 
 
 class AuthService(BaseService):
@@ -17,6 +18,7 @@ class AuthService(BaseService):
         super().__init__(repository)
 
     async def sign_up(self, user_info: SignUp) -> SignInResponse:
+        await AuthValidator().validate(user_info)
         user = User(**user_info.dict(exclude_none=True))
         user.password = self._password_hash.hash(user_info.password)
         user = await self._repository.create(user)

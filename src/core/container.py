@@ -16,7 +16,11 @@ from src.services import *
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
+            # Api modules
             "src.api.v1.endpoints.auth",
+
+            # Validators
+            "src.validators.base_validator"
         ]
     )
 
