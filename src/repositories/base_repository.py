@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 
 from src.db.database import Base
+from src.core.exceptions import DuplicatedError
 
 
 T = TypeVar("T", bound=Base)
@@ -23,7 +24,6 @@ class BaseRepository:
                 session.add(instance=inst)
                 await session.commit()
                 await session.refresh(instance=inst)
-            except IntegrityError:
-                # TODO add exception handler
-                ...
+            except IntegrityError as e:
+                raise DuplicatedError(detail=str(e.orig))
             return inst
