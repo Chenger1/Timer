@@ -12,11 +12,6 @@ class SignUp(BaseModel):
     password: str
 
 
-class SignIn(BaseModel):
-    email: EmailStr
-    password: str
-
-
 class SignInResponse(BaseModel):
     access_token: str
     user_info: User

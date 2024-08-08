@@ -22,6 +22,9 @@ class Config(BaseConfig):
         port=DB_PORT,
     )
 
+    JWT_RANDOM: str = os.getenv("JWT_RANDOM")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+
     class Config:
         case_sensitive = True
 

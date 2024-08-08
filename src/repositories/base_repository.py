@@ -1,13 +1,19 @@
 from typing import (
     TypeVar,
-    Type
+    Optional,
+    Type,
+    Any,
+    Sequence,
+    Union
 )
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import select, Row
 
 from src.db.database import Base
 from src.core.exceptions import DuplicatedError
+from src.utils.query_builder import convert_dict_to_sqlalchemy_filters
 
 
 T = TypeVar("T", bound=Base)
@@ -17,6 +23,18 @@ class BaseRepository:
     def __init__(self, session_factory: Type[AsyncSession], model: Type[T]):
         self._session_factory = session_factory
         self._model = model
+
+    async def get_many_with_filters(self, filters: Optional[dict] = None) -> Sequence[Row[tuple[Any]]]:
+        async with self._session_factory() as session:
+            filter_options = convert_dict_to_sqlalchemy_filters(self._model, filters)
+            filtered_query = select(self._model).where(filter_options)
+            return (await session.execute(filtered_query)).fetchall()
+
+    async def get_one_with_filters(self, filters: Optional[dict] = None) -> Union[T, None]:
+        async with self._session_factory() as session:
+            filter_options = convert_dict_to_sqlalchemy_filters(self._model, filters)
+            filtered_query = select(self._model).where(filter_options)
+            return (await session.execute(filtered_query)).first()[0]
 
     async def create(self, inst: T) -> T:
         async with self._session_factory() as session:
