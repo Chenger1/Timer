@@ -1,16 +1,19 @@
-from pydantic import BaseModel
+from pydantic import (
+    BaseModel,
+    EmailStr
+)
 
 from src.schemas.users import User
 
 
 class SignUp(BaseModel):
     name: str
-    email: str
+    email: EmailStr
     password: str
 
 
 class SignIn(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
