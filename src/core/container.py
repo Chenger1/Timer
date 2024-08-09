@@ -25,7 +25,7 @@ class Container(containers.DeclarativeContainer):
             "src.validators.base_validator",
             
             # dependencies
-            "src.dependencies"
+            "src.dependencies.security",
         ]
     )
 
