@@ -1,6 +1,7 @@
 from sqlalchemy.orm import (
     Mapped,
-    mapped_column
+    mapped_column,
+    relationship
 )
 from sqlalchemy import (
     String,
@@ -16,3 +17,5 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True)
     name: Mapped[str] = mapped_column(String(255))
     password: Mapped[str] = mapped_column(String(255))
+
+    tasks = relationship("Tasks", back_populates="user")

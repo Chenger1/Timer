@@ -1,6 +1,4 @@
-from __future__ import annotations
 from datetime import datetime
-from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import (
     Mapped,
@@ -15,9 +13,6 @@ from sqlalchemy import (
 
 from src.db.database import Base
 
-if TYPE_CHECKING:
-    from src.models.user import User
-
 
 class Tasks(Base):
     __tablename__ = "tasks"
@@ -27,4 +22,4 @@ class Tasks(Base):
     start_date: Mapped[datetime] = mapped_column(DateTime())
     end_date: Mapped[datetime] = mapped_column(DateTime())
     user_id = mapped_column(ForeignKey("users.id"))
-    user: Mapped[User] = relationship(back_populates="tasks")
+    user = relationship("User", back_populates="tasks")

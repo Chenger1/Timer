@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import (
 from src.core.config import Config
 from src.repositories import *
 from src.services import *
+from src.services.tasks_service import TasksService
 
 
 class Container(containers.DeclarativeContainer):
@@ -18,6 +19,7 @@ class Container(containers.DeclarativeContainer):
         modules=[
             # Api modules
             "src.api.v1.endpoints.auth",
+            "src.api.v1.endpoints.tasks",
 
             # Validators
             "src.validators.base_validator"
@@ -32,5 +34,7 @@ class Container(containers.DeclarativeContainer):
     async_session = providers.Factory(async_sessionmaker, bind=engine, expire_on_commit=False)
 
     user_repository = providers.Factory(UserRepository, session_factory=async_session)
+    tasks_repository = providers.Factory(TasksRepository, session_factory=async_session)
 
     auth_service = providers.Factory(AuthService, repository=user_repository)
+    tasks_service = providers.Factory(TasksService, repository=tasks_repository)
