@@ -22,7 +22,10 @@ class Container(containers.DeclarativeContainer):
             "src.api.v1.endpoints.tasks",
 
             # Validators
-            "src.validators.base_validator"
+            "src.validators.base_validator",
+            
+            # dependencies
+            "src.dependencies"
         ]
     )
 
@@ -38,3 +41,4 @@ class Container(containers.DeclarativeContainer):
 
     auth_service = providers.Factory(AuthService, repository=user_repository)
     tasks_service = providers.Factory(TasksService, repository=tasks_repository)
+    user_service = providers.Factory(UserService, repository=user_repository)

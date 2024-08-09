@@ -10,12 +10,14 @@ from fastapi import (
 
 from src.schemas.tasks import CreateTask
 from src.core.container import Container
+from src.dependencies.security import get_current_user
 from src.services.tasks_service import TasksService
 
 
 router = APIRouter(
     prefix="/tasks",
-    tags=["tasks"]
+    tags=["tasks"],
+    dependencies=[Depends(get_current_user)]
 )
 
 

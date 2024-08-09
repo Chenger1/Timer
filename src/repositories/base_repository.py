@@ -24,6 +24,13 @@ class BaseRepository:
         self._session_factory = session_factory
         self._model = model
 
+    async def get_by_id(self, obj_id: int) -> Optional[T]:
+        async with self._session_factory() as session:
+            res = await session.execute(
+                select(self._model).filter_by(id=obj_id)
+            )
+            return res.scalars().first()
+
     async def get_many_with_filters(self, filters: Optional[dict] = None) -> Sequence[Row[tuple[Any]]]:
         async with self._session_factory() as session:
             filter_options = convert_dict_to_sqlalchemy_filters(self._model, filters)

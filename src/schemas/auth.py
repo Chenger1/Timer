@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import (
     BaseModel,
     EmailStr
@@ -14,4 +16,11 @@ class SignUp(BaseModel):
 
 class SignInResponse(BaseModel):
     access_token: str
+    expiration_time: datetime
     user_info: User
+
+
+class JWTPayload(BaseModel):
+    id: int
+    email: str
+    name: str
