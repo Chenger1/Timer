@@ -9,6 +9,7 @@ from alembic import context
 
 from src.db.database import Base
 from src.models.user import User
+from src.models.tasks import Tasks
 from src.core.config import Config
 
 # this is the Alembic Config object, which provides
