@@ -31,3 +31,9 @@ async def create_task(task_info: CreateTask, task_service: TasksService = Depend
 async def update_task(task_id: int, task_info: CreateTask,
                       task_service: TasksService = Depends(Provide[Container.tasks_service])):
     return await task_service.edit_task(task_id, task_info)
+
+
+@router.post("/delete/{task_id}",)
+@inject
+async def delete_task(task_id: int, task_service: TasksService = Depends(Provide[Container.tasks_service])):
+    return await task_service.delete_task(task_id)

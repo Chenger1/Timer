@@ -34,3 +34,13 @@ class TasksService(BaseService):
             user_id=task.user_id,
             task_id=task.id
         )
+
+    async def delete_task(self, task_id: int) -> TaskResponse:
+        task = await self._repository.delete_by_id(task_id)
+        return TaskResponse(
+            title=task.title,
+            start_date=task.start_date,
+            end_date=task.end_date,
+            user_id=task.user_id,
+            task_id=task.id
+        )

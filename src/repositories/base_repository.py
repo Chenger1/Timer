@@ -61,3 +61,14 @@ class BaseRepository:
 
     async def update(self, inst: T) -> T:
         return await self.create(inst)
+
+    async def delete_by_id(self, obj_id: int) -> T:
+        async with self._session_factory() as session:
+            obj = (await session.execute(
+                select(self._model).filter_by(id=obj_id)
+            )).scalars().first()
+            if obj is None:
+                raise NotFoundError(f"Not found entity with id: {obj_id}")
+            await session.delete(obj)
+            await session.commit()
+            return obj
