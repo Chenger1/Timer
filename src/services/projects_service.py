@@ -18,7 +18,9 @@ class ProjectsService(BaseService):
             is_public=model.is_public,
             user_id=model.user_id,
             client_id=model.client_id,
-            id=model.id
+            id=model.id,
+            is_billable=model.is_billable,
+            rate=model.rate
         )
 
     async def create_repository(self, schema: ProjectSchema) -> ProjectResponse:
