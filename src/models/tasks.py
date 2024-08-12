@@ -21,5 +21,9 @@ class Tasks(Base):
     title: Mapped[str] = mapped_column(String(255))
     start_date: Mapped[datetime] = mapped_column(DateTime())
     end_date: Mapped[datetime] = mapped_column(DateTime())
+
     user_id = mapped_column(ForeignKey("users.id"))
+    project_id = mapped_column(ForeignKey("projects.id"))
+
     user = relationship("User", back_populates="tasks")
+    project = relationship("Projects", back_populates="tasks")
