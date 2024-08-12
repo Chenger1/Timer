@@ -19,3 +19,5 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(255))
 
     tasks = relationship("Tasks", back_populates="user")
+    projects = relationship("Projects", back_populates="user")
+    clients = relationship("Clients", back_populates="user")

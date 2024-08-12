@@ -24,3 +24,4 @@ class Projects(Base):
 
     user = relationship("User", back_populates="projects")
     client = relationship("Clients", back_populates="projects")
+    tasks = relationship("Tasks", back_populates="project")

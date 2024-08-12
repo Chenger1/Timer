@@ -1,3 +1,8 @@
+from typing import (
+    List,
+    Optional
+)
+
 from src.services.base_service import BaseService
 from src.repositories.tasks_repository import TasksRepository
 from src.schemas.tasks import (
@@ -12,35 +17,33 @@ class TasksService(BaseService):
     def __init__(self, repository: TasksRepository):
         super().__init__(repository)
 
+    @classmethod
+    def convert_model_to_schema(cls, model: Tasks) -> TaskResponse:
+        return TaskResponse(
+            title=model.title,
+            start_date=model.start_date,
+            end_date=model.end_date,
+            user_id=model.user_id,
+            task_id=model.id
+        )
+
     async def create_task(self, task_info: CreateTask) -> TaskResponse:
         task = Tasks(**task_info.dict(exclude_none=True))
         task = await self._repository.create(task)
-        return TaskResponse(
-            title=task.title,
-            start_date=task.start_date,
-            end_date=task.end_date,
-            user_id=task.user_id,
-            task_id=task.id
-        )
+        return self.convert_model_to_schema(task)
 
     async def edit_task(self, task_id: int, task_info: CreateTask) -> TaskResponse:
         task = await self._repository.get_by_id(task_id)
         apply_pydantic_fields_to_model(task, task_info)
         task = await self._repository.update(task)
-        return TaskResponse(
-            title=task.title,
-            start_date=task.start_date,
-            end_date=task.end_date,
-            user_id=task.user_id,
-            task_id=task.id
-        )
+        return self.convert_model_to_schema(task)
 
     async def delete_task(self, task_id: int) -> TaskResponse:
         task = await self._repository.delete_by_id(task_id)
-        return TaskResponse(
-            title=task.title,
-            start_date=task.start_date,
-            end_date=task.end_date,
-            user_id=task.user_id,
-            task_id=task.id
-        )
+        return self.convert_model_to_schema(task)
+
+    async def get_tasks_list(self, user_id: int, project_id: Optional[int] = None) -> List[TaskResponse]:
+        tasks = await self._repository.get_many_with_filters(filters={"user_id": user_id, "project_id": project_id})
+        return [
+            self.convert_model_to_schema(task[0]) for task in tasks
+        ]

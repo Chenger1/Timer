@@ -23,3 +23,5 @@ class Clients(Base):
 
     user_id = mapped_column(ForeignKey("users.id"))
     user = relationship("User", back_populates="clients")
+
+    projects = relationship("Projects", back_populates="client")
