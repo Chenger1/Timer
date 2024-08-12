@@ -1,2 +1,5 @@
 from src.repositories.user_repository import UserRepository
 from src.repositories.tasks_repository import TasksRepository
+from src.repositories.clients_repository import ClientsRepository
+from src.repositories.projects_repository import ProjectsRepository
+
