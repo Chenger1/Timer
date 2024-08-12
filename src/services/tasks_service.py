@@ -24,8 +24,8 @@ class TasksService(BaseService):
             start_date=model.start_date,
             end_date=model.end_date,
             user_id=model.user_id,
-            task_id=model.id,
-            project_id=model.project_id
+            id=model.id,
+            project_id=model.project_id,
         )
 
     async def create_task(self, task_info: CreateTask) -> TaskResponse:
