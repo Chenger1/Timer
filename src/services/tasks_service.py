@@ -1,5 +1,5 @@
 from typing import (
-    List,
+    Iterable,
     Optional
 )
 
@@ -42,8 +42,6 @@ class TasksService(BaseService):
         task = await self._repository.delete_by_id(task_id)
         return self.convert_model_to_schema(task)
 
-    async def get_tasks_list(self, user_id: int, project_id: Optional[int] = None) -> List[TaskResponse]:
-        tasks = await self._repository.get_many_with_filters(filters={"user_id": user_id, "project_id": project_id})
-        return [
-            self.convert_model_to_schema(task[0]) for task in tasks
-        ]
+    async def get_tasks_list(self, user_id: int, project_id: Optional[int] = None) -> Iterable[TaskResponse]:
+        return await self._repository.get_many_with_filters(filters={"user_id": user_id, "project_id": project_id},
+                                                            paginate_query=True)

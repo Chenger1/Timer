@@ -10,6 +10,7 @@ from typing import (
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select, Row, RowMapping
+from fastapi_pagination.ext.async_sqlalchemy import paginate
 
 from src.db.database import Base
 from src.core.exceptions import (
@@ -37,10 +38,14 @@ class BaseRepository:
                 raise NotFoundError(f"Not found entity with id: {obj_id}")
             return obj
 
-    async def get_many_with_filters(self, filters: Optional[dict] = None) -> Sequence[Row[tuple[Any]]]:
+    async def get_many_with_filters(self,
+                                    filters: Optional[dict] = None,
+                                    paginate_query: bool = False) -> Sequence[Row[tuple[Any]]]:
         async with self._session_factory() as session:
             filter_options = convert_dict_to_sqlalchemy_filters(self._model, filters)
             filtered_query = select(self._model).where(filter_options)
+            if paginate_query is True:
+                return await paginate(session, filtered_query)
             return (await session.execute(filtered_query)).fetchall()
 
     async def get_one_with_filters(self, filters: Optional[dict] = None) -> Union[T, None]:

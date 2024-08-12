@@ -1,17 +1,14 @@
-from typing import (
-    Optional,
-    List
-)
+from typing import Optional
 
 from dependency_injector.wiring import (
     inject,
     Provide
 )
-
 from fastapi import (
     APIRouter,
     Depends
 )
+from fastapi_pagination import Page
 
 from src.schemas.tasks import (
     CreateTask,
@@ -28,26 +25,26 @@ router = APIRouter(
 )
 
 
-@router.post("/create", dependencies=[Depends(require_permissions())])
+@router.post("/create", dependencies=[Depends(require_permissions())], response_model=TaskResponse)
 @inject
 async def create_task(task_info: CreateTask, task_service: TasksService = Depends(Provide[Container.tasks_service])):
     return await task_service.create_task(task_info)
 
 
-@router.post("/update/{task_id}", dependencies=[Depends(require_permissions())])
+@router.post("/update/{task_id}", dependencies=[Depends(require_permissions())], response_model=TaskResponse)
 @inject
 async def update_task(task_id: int, task_info: CreateTask,
                       task_service: TasksService = Depends(Provide[Container.tasks_service])):
     return await task_service.edit_task(task_id, task_info)
 
 
-@router.post("/delete/{task_id}",)
+@router.post("/delete/{task_id}", response_model=TaskResponse)
 @inject
 async def delete_task(task_id: int, task_service: TasksService = Depends(Provide[Container.tasks_service])):
     return await task_service.delete_task(task_id)
 
 
-@router.post("/list", response_model=List[TaskResponse])
+@router.post("/list", response_model=Page[TaskResponse])
 @inject
 async def tasks_list(user_id: int,
                      project_id: Optional[int] = None,
