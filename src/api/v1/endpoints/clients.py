@@ -19,7 +19,7 @@ from src.dependencies.security import require_permissions
 router = APIRouter(prefix="/clients", tags=["clients"])
 
 
-@router.post("/create", dependencies=[], response_model=ClientResponseSchema)
+@router.post("/create", dependencies=[Depends(require_permissions())], response_model=ClientResponseSchema)
 @inject
 async def create_client(client: ClientSchema, service: ClientsService = Depends(Provide[Container.clients_service])):
     return await service.create_client(client)
