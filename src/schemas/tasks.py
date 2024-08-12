@@ -11,6 +11,7 @@ class CreateTask(BaseModel):
     start_date: datetime
     end_date: datetime
     user_id: int
+    project_id: int
 
 
 class TaskResponse(BaseModel):
@@ -18,4 +19,5 @@ class TaskResponse(BaseModel):
     start_date: datetime
     end_date: datetime
     user_id: int
+    project_id: int
     task_id: int = Field(alias="id")
