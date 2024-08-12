@@ -19,7 +19,7 @@ from src.dependencies.security import require_permissions
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
-@router.post("/create", dependencies=[], response_model=ProjectResponse)
+@router.post("/create", dependencies=[Depends(require_permissions())], response_model=ProjectResponse)
 @inject
 async def create_project(project: ProjectSchema, service: ProjectsService = Depends(Provide[Container.projects_service])):
     return await service.create_repository(project)
