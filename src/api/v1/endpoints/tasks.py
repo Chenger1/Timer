@@ -24,3 +24,10 @@ router = APIRouter(
 @inject
 async def create_task(task_info: CreateTask, task_service: TasksService = Depends(Provide[Container.tasks_service])):
     return await task_service.create_task(task_info)
+
+
+@router.post("/update/{task_id}", dependencies=[Depends(require_permissions())])
+@inject
+async def update_task(task_id: int, task_info: CreateTask,
+                      task_service: TasksService = Depends(Provide[Container.tasks_service])):
+    return await task_service.edit_task(task_id, task_info)

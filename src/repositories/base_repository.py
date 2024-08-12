@@ -9,10 +9,13 @@ from typing import (
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import select, Row
+from sqlalchemy import select, Row, RowMapping
 
 from src.db.database import Base
-from src.core.exceptions import DuplicatedError
+from src.core.exceptions import (
+    DuplicatedError,
+    NotFoundError
+)
 from src.utils.query_builder import convert_dict_to_sqlalchemy_filters
 
 
@@ -24,12 +27,15 @@ class BaseRepository:
         self._session_factory = session_factory
         self._model = model
 
-    async def get_by_id(self, obj_id: int) -> Optional[T]:
+    async def get_by_id(self, obj_id: int) -> Row[Any] | RowMapping:
         async with self._session_factory() as session:
             res = await session.execute(
                 select(self._model).filter_by(id=obj_id)
             )
-            return res.scalars().first()
+            obj = res.scalars().first()
+            if obj is None:
+                raise NotFoundError(f"Not found entity with id: {obj_id}")
+            return obj
 
     async def get_many_with_filters(self, filters: Optional[dict] = None) -> Sequence[Row[tuple[Any]]]:
         async with self._session_factory() as session:
@@ -52,3 +58,6 @@ class BaseRepository:
             except IntegrityError as e:
                 raise DuplicatedError(detail=str(e.orig))
             return inst
+
+    async def update(self, inst: T) -> T:
+        return await self.create(inst)
