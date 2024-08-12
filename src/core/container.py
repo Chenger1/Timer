@@ -12,6 +12,7 @@ from src.core.config import Config
 from src.repositories import *
 from src.services import *
 from src.services.clients_service import ClientsService
+from src.services.projects_service import ProjectsService
 from src.services.tasks_service import TasksService
 
 
@@ -22,6 +23,7 @@ class Container(containers.DeclarativeContainer):
             "src.api.v1.endpoints.auth",
             "src.api.v1.endpoints.tasks",
             "src.api.v1.endpoints.clients",
+            "src.api.v1.endpoints.projects",
 
             # Validators
             "src.validators.base_validator",
@@ -41,8 +43,10 @@ class Container(containers.DeclarativeContainer):
     user_repository = providers.Factory(UserRepository, session_factory=async_session)
     tasks_repository = providers.Factory(TasksRepository, session_factory=async_session)
     clients_repository = providers.Factory(ClientsRepository, session_factory=async_session)
+    projects_repository = providers.Factory(ProjectsRepository, session_factory=async_session)
 
     auth_service = providers.Factory(AuthService, repository=user_repository)
     tasks_service = providers.Factory(TasksService, repository=tasks_repository)
     user_service = providers.Factory(UserService, repository=user_repository)
     clients_service = providers.Factory(ClientsService, repository=clients_repository)
+    projects_service = providers.Factory(ProjectsService, repository=projects_repository)
