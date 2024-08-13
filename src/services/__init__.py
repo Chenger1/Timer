@@ -3,3 +3,4 @@ from src.services.user_service import UserService
 from src.services.tasks_services.tasks_service import TasksService
 from src.services.clients_service import ClientsService
 from src.services.projects_service import ProjectsService
+from src.services.reports_services.summary_service import SummaryService

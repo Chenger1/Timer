@@ -44,7 +44,7 @@ async def delete_task(task_id: int, task_service: TasksService = Depends(Provide
     return await task_service.delete_task(task_id)
 
 
-@router.post("/list",  dependencies=[Depends(require_permissions())], response_model=Page[TaskResponse])
+@router.get("/list",  dependencies=[Depends(require_permissions())], response_model=Page[TaskResponse])
 @inject
 async def tasks_list(user_id: int,
                      project_id: Optional[int] = None,

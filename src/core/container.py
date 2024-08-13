@@ -24,6 +24,7 @@ class Container(containers.DeclarativeContainer):
             "src.api.v1.endpoints.tasks",
             "src.api.v1.endpoints.clients",
             "src.api.v1.endpoints.projects",
+            "src.api.v1.endpoints.reports",
 
             # Validators
             "src.validators.base_validator",
@@ -50,3 +51,4 @@ class Container(containers.DeclarativeContainer):
     user_service = providers.Factory(UserService, repository=user_repository)
     clients_service = providers.Factory(ClientsService, repository=clients_repository)
     projects_service = providers.Factory(ProjectsService, repository=projects_repository)
+    summary_service = providers.Factory(SummaryService, repository=tasks_repository)
