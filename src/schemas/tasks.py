@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import (
     BaseModel,
@@ -20,4 +21,5 @@ class TaskResponse(BaseModel):
     end_date: datetime
     user_id: int
     project_id: int
+    earned: Decimal
     task_id: int = Field(alias="id")

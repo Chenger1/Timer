@@ -16,7 +16,7 @@ from src.schemas.tasks import (
 )
 from src.core.container import Container
 from src.dependencies.security import require_permissions
-from src.services.tasks_service import TasksService
+from src.services.tasks_services.tasks_service import TasksService
 
 
 router = APIRouter(

@@ -4,6 +4,7 @@ from typing import (
 )
 
 from src.services.base_service import BaseService
+from src.services.tasks_services.earning_service import TaskEarningCalculator
 from src.repositories.tasks_repository import TasksRepository
 from src.schemas.tasks import (
     CreateTask,
@@ -26,11 +27,16 @@ class TasksService(BaseService):
             user_id=model.user_id,
             id=model.id,
             project_id=model.project_id,
+            earned=model.earned,
         )
 
     async def create_task(self, task_info: CreateTask) -> TaskResponse:
         task = Tasks(**task_info.dict(exclude_none=True))
         task = await self._repository.create(task)
+        # get with joins
+        task = await self._repository.get_by_id(task.id)
+        TaskEarningCalculator.calculate_earning_for_task(task)
+        task = await self._repository.update(task)
         return self.convert_model_to_schema(task)
 
     async def edit_task(self, task_id: int, task_info: CreateTask) -> TaskResponse:
